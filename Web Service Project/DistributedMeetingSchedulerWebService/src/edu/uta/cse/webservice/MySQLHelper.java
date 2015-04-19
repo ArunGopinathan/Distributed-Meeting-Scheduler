@@ -19,7 +19,7 @@ public class MySQLHelper {
 
 	public MySQLHelper() {
 		// TODO Auto-generated constructor stub
-		String url = "jdbc:mysql://localhost:3306/attendancemgmtsystem";
+		String url = "jdbc:mysql://localhost:3306/dmsdatabase";
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection(url, "root", "rainbow");
