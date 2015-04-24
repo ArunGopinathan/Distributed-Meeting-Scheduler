@@ -28,7 +28,6 @@ public class MySQLHelper {
 			e.printStackTrace();
 		}
 
-		
 	}
 
 	public ResultSet executeQueryAndGetResultSet(String query) {
@@ -36,12 +35,26 @@ public class MySQLHelper {
 
 		try {
 			Statement st = conn.createStatement();
-			result= st.executeQuery(query);
+			result = st.executeQuery(query);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return result;
+	}
+
+	public void executeQuery(String query) {
+		
+		try
+		{
+			Statement st = conn.createStatement();
+			st.executeUpdate(query);
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
 	}
 
 	// dispose the connection

@@ -17,6 +17,8 @@ public class User {
 	private String LastName;
 	@Element
 	private String MavEmail;
+	@Element(required=false)
+	private String Password;
 	@Element(required =false)
 	private String AndroidDeviceId;
 	
@@ -43,5 +45,11 @@ public class User {
 	}
 	public void setAndroidDeviceId(String androidDeviceId) {
 		AndroidDeviceId = androidDeviceId;
+	}
+	public String getPassword() {
+		return Password;
+	}
+	public void setPassword(String password) {
+		this.Password = password;
 	}
 }
