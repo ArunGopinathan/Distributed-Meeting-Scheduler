@@ -19,7 +19,6 @@
                 android:layout_height="wrap_content" android:orientation="vertical"
                 android:weightSum="1">
                 <ImageView android:id="@+id/loginImage"
-                    android:src="@mipmap/meeting_logo"
                     android:layout_width="match_parent"
                     android:layout_height="139dp"
 
@@ -35,8 +34,7 @@
                 <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress" android:maxLines="1"
-                    android:singleLine="true"  android:layout_marginTop="16dp"
-                    />
+                    android:singleLine="true"  android:layout_marginTop="16dp" />
 
                 <EditText android:id="@+id/password" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_password"

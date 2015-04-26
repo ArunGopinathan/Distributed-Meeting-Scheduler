@@ -90,8 +90,7 @@ public class SignInActivity extends ActionBarActivity {
         {
 
             //  String url = "http://192.168.0.6:8080/AMSWebServices/AMSService/Authenticate/"+userName+"/"+password;
-            //we will change this afterwards
-            String url = "http://localhost:8080/DistributedMeetingSchedulerWebService/DMSWebService/Authenticate2/"+userName+"/"+password;
+            String url = "http://10.194.9.37:8080/AMSWebServices/AMSService/Authenticate/"+userName+"/"+password;
             HttpGet getRequest = new HttpGet(url);
             //Log.w("AMS-S",getRequest.toString());
             HttpResponse httpResponse = httpclient.execute( getRequest);
