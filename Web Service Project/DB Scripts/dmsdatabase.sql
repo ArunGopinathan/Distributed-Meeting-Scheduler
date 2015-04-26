@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2015 at 10:11 AM
+-- Generation Time: Apr 26, 2015 at 11:44 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -40,7 +40,51 @@ CREATE TABLE IF NOT EXISTS `login` (
 --
 
 INSERT INTO `login` (`UserId`, `FirstName`, `LastName`, `MavEmail`, `Password`, `DeviceId`) VALUES
-(1, 'Arun', 'Gopinathan', 'arun.gopinathan@mavs.uta.edu', '1234', '');
+(1, 'Arun', 'Gopinathan', 'arun.gopinathan@mavs.uta.edu', '1234', ''),
+(2, 'Venkataprabha', 'Varadharajan', 'Venkataprab.Varadharajan@mavs.uta.edu', '123', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `meetingdates`
+--
+
+CREATE TABLE IF NOT EXISTS `meetingdates` (
+`MeetingDateId` int(11) NOT NULL,
+  `MeetingId` int(11) NOT NULL,
+  `MeetingDate` date NOT NULL,
+  `MeetingStartTime` time NOT NULL,
+  `MeetingEndTime` time NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `meetingdates`
+--
+
+INSERT INTO `meetingdates` (`MeetingDateId`, `MeetingId`, `MeetingDate`, `MeetingStartTime`, `MeetingEndTime`) VALUES
+(1, 1, '2015-04-26', '11:00:00', '11:30:00'),
+(2, 1, '2015-04-26', '12:00:00', '12:30:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `proposedmeeting`
+--
+
+CREATE TABLE IF NOT EXISTS `proposedmeeting` (
+`MeetingId` int(11) NOT NULL,
+  `UserId` int(11) NOT NULL,
+  `MeetingName` varchar(20) NOT NULL,
+  `Agenda` varchar(100) NOT NULL,
+  `Location` varchar(20) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `proposedmeeting`
+--
+
+INSERT INTO `proposedmeeting` (`MeetingId`, `UserId`, `MeetingName`, `Agenda`, `Location`) VALUES
+(2, 1, 'Testing Meeting', 'To check whether the XML request is parsed properly', 'Vintage Pads #102');
 
 --
 -- Indexes for dumped tables
@@ -53,6 +97,18 @@ ALTER TABLE `login`
  ADD PRIMARY KEY (`UserId`);
 
 --
+-- Indexes for table `meetingdates`
+--
+ALTER TABLE `meetingdates`
+ ADD PRIMARY KEY (`MeetingDateId`);
+
+--
+-- Indexes for table `proposedmeeting`
+--
+ALTER TABLE `proposedmeeting`
+ ADD PRIMARY KEY (`MeetingId`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -61,6 +117,16 @@ ALTER TABLE `login`
 --
 ALTER TABLE `login`
 MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `meetingdates`
+--
+ALTER TABLE `meetingdates`
+MODIFY `MeetingDateId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `proposedmeeting`
+--
+ALTER TABLE `proposedmeeting`
+MODIFY `MeetingId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -43,15 +43,27 @@ public class MySQLHelper {
 		return result;
 	}
 
+	//this method will return insert id
+	public int executeInsertQueryAndReturnId(String query) {
+		int id = -1;
+		try {
+			Statement st = conn.createStatement();
+			id = st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+
+		}
+
+		return id;
+	}
+
 	public void executeQuery(String query) {
-		
-		try
-		{
+
+		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate(query);
-		}
-		catch(Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
