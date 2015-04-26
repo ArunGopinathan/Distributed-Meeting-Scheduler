@@ -48,7 +48,13 @@ public class MySQLHelper {
 		int id = -1;
 		try {
 			Statement st = conn.createStatement();
-			id = st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			 st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			 //get the inserted row id
+			ResultSet rs = st.getGeneratedKeys();
+			while(rs.next())
+			{
+				id = rs.getInt(1);
+			}
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -23,6 +23,8 @@ public class ProposeMeetingRequest {
 	private Collection<MeetingDate> MeetingDates;
 	@Element
 	private String MeetingLocation;
+	@ElementList
+	private Collection<Participant> Participants;
 
 	public String getMeetingName() {
 		return MeetingName;
@@ -62,5 +64,13 @@ public class ProposeMeetingRequest {
 
 	public void setMeetingLocation(String meetingLocation) {
 		MeetingLocation = meetingLocation;
+	}
+
+	public Collection<Participant> getParticipants() {
+		return Participants;
+	}
+
+	public void setParticipants(Collection<Participant> participants) {
+		Participants = participants;
 	}
 }

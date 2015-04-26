@@ -95,11 +95,11 @@ public class DMSWebServiceImpl {
 	}
 
 	// /DistributedMeetingSchedulerWebService/DMSWebService/ProposeMeeting/
-	//dont forget its a post request
+	// dont forget its a post request
 	@Path("/ProposeMeeting")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	public String proposeMeeting( String request) {
+	public String proposeMeeting(String request) {
 		String response = "";
 		try {
 			ProposeMeetingRequest proposeMeetingRequest = deserializeProposeMeetingRequestXML(request);
@@ -123,6 +123,11 @@ public class DMSWebServiceImpl {
 					helper.executeQuery(meetingdateQuery);
 
 				}
+				// now insert the participants for the meeting
+				for (Participant p : proposeMeetingRequest.getParticipants()) {
+					String participantQuery = generateParticipantsQuery(meetingId, p);
+					helper.executeQuery(participantQuery);
+				}
 
 			}
 			// dispose the connection object
@@ -134,6 +139,13 @@ public class DMSWebServiceImpl {
 		}
 
 		return response;
+	}
+
+	public String generateParticipantsQuery(int meetingId, Participant p) {
+		String query = "insert into participants(MeetingId,UserEmailId) values("
+				+ meetingId + ",'" + p.getUserEmailId() + "')";
+
+		return query;
 	}
 
 	public String generateMeetingDateQuery(int meetingId, MeetingDate m,
