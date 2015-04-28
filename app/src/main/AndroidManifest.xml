@@ -36,6 +36,18 @@
             android:name=".ScheduleMeeting"
             android:label="@string/title_activity_schedule_meeting" >
         </activity>
+        <activity
+            android:name=".ADD_Invites"
+            android:label="@string/title_activity_add__invites" >
+        </activity>
+        <activity
+            android:name=".MenuPage"
+            android:label="@string/title_activity_menu_page" >
+        </activity>
+        <activity
+            android:name=".Event_Details"
+            android:label="@string/title_activity_event__details" >
+        </activity>
     </application>
 
 </manifest>

@@ -9,17 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-
+import java.util.Date;
 
 
 public class ScheduleMeeting extends ActionBarActivity
 {
-    EditText title,startdate,time;
+    EditText titl,startdate,st1,et1,st2,et2,st3,et3,locatn;
+  //  FrameLayout fr;
     public TimePicker timepicker1;
     public Button btn;
+    public Button nxt;
     //private TextView time;
     private String format = "";
     int year,monthOfYear,dayOfMonth;
@@ -28,19 +31,27 @@ public class ScheduleMeeting extends ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_meeting);
-        EditText title = (EditText) findViewById(R.id.Title);
+        titl = (EditText) findViewById(R.id.Title);
+      //  fr = (FrameLayout) findViewById(R.id.timeframe);
         startdate = (EditText) findViewById(R.id.startdate);
         timepicker1 = (TimePicker) findViewById(R.id.timePicker1);
         timepicker1.setVisibility(View.INVISIBLE);
         btn = (Button) findViewById(R.id.seteventtime);
+        nxt = (Button) findViewById(R.id.next);
         btn.setVisibility(View.INVISIBLE);
-        time = (EditText)findViewById(R.id.time);
-
+        //title = (EditText) findViewById(R.id.title);
+        st1 = (EditText)findViewById(R.id.st1);
+        et1 = (EditText)findViewById(R.id.et1);
+        st2 = (EditText)findViewById(R.id.st2);
+        et2 = (EditText)findViewById(R.id.et2);
+        st3 = (EditText)findViewById(R.id.st3);
+        et3 = (EditText)findViewById(R.id.et3);
+        locatn = (EditText)findViewById(R.id.location);
         // Calendar myCalendar = Calendar.getInstance();
         final Calendar myCalendar = Calendar.getInstance();
         int hour = myCalendar.get(Calendar.HOUR_OF_DAY);
         int min = myCalendar.get(Calendar.MINUTE);
-        showTime(hour,min);
+        //showTime(hour,min);
 
         // Calendar myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -57,6 +68,20 @@ public class ScheduleMeeting extends ActionBarActivity
             }
 
         };
+        titl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                titl.setText("");
+            }
+        });
+        locatn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+              locatn.setText("");
+            }
+        });
 
         btn.setOnClickListener(new View.OnClickListener()
         {
@@ -64,8 +89,9 @@ public class ScheduleMeeting extends ActionBarActivity
                                    @Override
                                    public void onClick(View v)
                                    {
-                                       setTime(v);
+
                                         timepicker1.setVisibility(View.INVISIBLE);
+                                       btn.setVisibility(View.INVISIBLE);
                                    }
                                }
         );
@@ -75,38 +101,90 @@ public class ScheduleMeeting extends ActionBarActivity
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+
                 new DatePickerDialog(ScheduleMeeting.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
-        time.setOnClickListener(new View.OnClickListener() {
+        st1.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v)
-            {
-                timepicker1.setVisibility(View.VISIBLE);
+            public void onClick(View v) {
                 btn.setVisibility(View.VISIBLE);
+                timepicker1.setVisibility(View.VISIBLE);
 
-                // TODO Auto-generated method stub
-             /*   new DatePickerDialog(ScheduleMeeting.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                        */
+                //fr.setVisibility(View.VISIBLE);
+                setTime(v, st1);
             }
         });
+        et1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                   timepicker1.setVisibility(View.VISIBLE);
+                   btn.setVisibility(View.VISIBLE);
+              //  fr.setVisibility(View.VISIBLE);
+                setTime(v,et1);
+            }
+        });
+        st2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn.setVisibility(View.VISIBLE);
+                timepicker1.setVisibility(View.VISIBLE);
 
+              //  fr.setVisibility(View.VISIBLE);
+                setTime(v,st2);
+            }
+        });
+        et2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               timepicker1.setVisibility(View.VISIBLE);
+               btn.setVisibility(View.VISIBLE);
+              //  fr.setVisibility(View.VISIBLE);
+                setTime(v,et2);
+            }
+        });
+        st3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timepicker1.setVisibility(View.VISIBLE);
+                btn.setVisibility(View.VISIBLE);
+               // fr.setVisibility(View.VISIBLE);
+                setTime(v,st3);
+            }
+        });
+        et3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               timepicker1.setVisibility(View.VISIBLE);
+                btn.setVisibility(View.VISIBLE);
+                //fr.setVisibility(View.VISIBLE);
+                setTime(v,et3);
+            }
+        });
+        nxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Data to be PASSED TO WEBSERVER HERE
+                String e = titl.getText().toString();
+                String d = startdate.getText().toString();
+                String stt1 = st1.getText().toString();
+                String ett1 = et1.getText().toString();
+            }
+        });
     }
-    public void setTime(View view)
+    public void setTime(View view,EditText time)
     {
 
         int hour = timepicker1.getCurrentHour();
         int min  = timepicker1.getCurrentMinute();
-        showTime(hour, min);
+        showTime(hour, min,time);
     }
 
-    public void showTime(int hour, int min) {
+    public void showTime(int hour, int min,EditText time) {
         if(hour == 0)
         {
             hour += 12;
