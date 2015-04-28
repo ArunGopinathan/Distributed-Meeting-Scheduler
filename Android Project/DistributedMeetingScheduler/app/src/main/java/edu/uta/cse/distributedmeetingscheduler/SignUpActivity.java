@@ -178,7 +178,7 @@ public class SignUpActivity extends ActionBarActivity {
             Log.i(TAG, "onPostExecute");
 
             mProgressView.setVisibility(View.GONE);
-            if(result.equals("SUCCESS"))
+            if(response.equals("SUCCESS"))
             {
                 //navigate back to login page
                 Toast toast = Toast.makeText(getApplicationContext(),R.string.register_success,Toast.LENGTH_LONG);
@@ -188,6 +188,9 @@ public class SignUpActivity extends ActionBarActivity {
                 mEmailView.setText("");
                 mPasswordView.setText("");
                 mConfirmPasswordView.setText("");
+
+                /*Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
+                startActivity(intent);*/
 
             }
             else
