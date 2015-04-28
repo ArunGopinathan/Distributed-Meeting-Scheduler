@@ -50,4 +50,8 @@
     <string name="title_activity_qrcode_generate">QRCodeGenerateActivity</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <string name="btn_propose_meeting">Propose Meeting</string>
+    <string name="btn_schedule_meeting">Schedule Meeting</string>
+    <string name="btn_notifications">Notifications</string>
+
 </resources>
