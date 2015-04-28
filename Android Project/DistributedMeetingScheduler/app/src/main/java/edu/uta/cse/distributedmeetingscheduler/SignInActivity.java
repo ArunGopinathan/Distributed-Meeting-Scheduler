@@ -1,11 +1,14 @@
 package edu.uta.cse.distributedmeetingscheduler;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,14 +35,15 @@ public class SignInActivity extends ActionBarActivity {
     private View mLoginFormView;
     // private TextView mErrorMessageView;
     private Button btnSignin, btnSignup;
-
+    private String URLFORMAT = "http://%s/DistributedMeetingSchedulerWebService/DMSWebService/Authenticate2/";
+    private String URL = "http://dms.ngrok.io/DistributedMeetingSchedulerWebService/DMSWebService/Authenticate2/";
     boolean isAsyncTaskCompleted = false;
     private final String NAMESPACE = "http://aruncyberspace.blogspot.in";
 
 
     String userName;
     String password;
-    String TAG = "AMSS";
+    String TAG = "DMSS";
     User user = null;
     String userXML = "";
     String serverAddress = "";
@@ -48,6 +52,37 @@ public class SignInActivity extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
         startActivity(intent);
     }
+    protected void showInputDialog() {
+
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(SignInActivity.this);
+        View promptView = layoutInflater.inflate(R.layout.input_layout, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignInActivity.this);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // resultText.setText("Hello, " + editText.getText());
+                        String urlresult = String.format(URLFORMAT,editText.getText());
+                        URL = urlresult;
+                        Log.w(TAG,"url result "+urlresult);
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +125,8 @@ public class SignInActivity extends ActionBarActivity {
         {
 
             //  String url = "http://192.168.0.6:8080/AMSWebServices/AMSService/Authenticate/"+userName+"/"+password;
-            String url = "http://10.194.9.37:8080/AMSWebServices/AMSService/Authenticate/"+userName+"/"+password;
+            String url = URL + userName + "/" + password;
+            Log.w(TAG,"url="+url);
             HttpGet getRequest = new HttpGet(url);
             //Log.w("AMS-S",getRequest.toString());
             HttpResponse httpResponse = httpclient.execute( getRequest);
@@ -100,6 +136,7 @@ public class SignInActivity extends ActionBarActivity {
 
             if (entity != null) {
                 result = EntityUtils.toString(entity);
+                userXML = result;
                 Log.w("AMS-S","Entity : "+result);
             }
 
