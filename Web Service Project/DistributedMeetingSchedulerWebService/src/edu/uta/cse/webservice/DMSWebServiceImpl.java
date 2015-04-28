@@ -59,20 +59,25 @@ public class DMSWebServiceImpl {
 	public String Authenticate2(@PathParam("username") String username,
 			@PathParam("password") String password) {
 		String result = "";
+		try {
 
-		MySQLHelper helper = new MySQLHelper();
-		String query = "select * from login where MavEmail='" + username
-				+ "' and Password='" + password + "'";
-		ResultSet resultset = helper.executeQueryAndGetResultSet(query);
+			MySQLHelper helper = new MySQLHelper();
+			String query = "select * from login where MavEmail='" + username
+					+ "' and Password='" + password + "'";
+			ResultSet resultset = helper.executeQueryAndGetResultSet(query);
 
-		User user = processUserResultSet(resultset);
+			User user = processUserResultSet(resultset);
 
-		// dispose connection
-		helper.disposeConnection();
-		if (user != null)
-			System.out.println(user.toString());
+			// dispose connection
+			helper.disposeConnection();
+			if (user != null)
+				System.out.println(user.toString());
 
-		result = getUserXml(user);
+			result = getUserXml(user);
+			System.out.println("Authenticated:" + result);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
 		return result;
 
@@ -80,20 +85,27 @@ public class DMSWebServiceImpl {
 
 	// http://localhost:8080/DistributedMeetingSchedulerWebService/DMSWebService/Register?request=%3C?xml%20version=%221.0%22%20encoding=%22UTF-8%22?%3E%20%3Cuser%3E%20%3CFirstName%3EVenkataprabha%3C/FirstName%3E%20%3CLastName%3EVaradharajan%3C/LastName%3E%20%3CMavEmail%3EVenkataprab.Varadharajan@mavs.uta.edu%3C/MavEmail%3E%20%3CPassword%3E123%3C/Password%3E%20%3CAndroidDeviceId%3E%3C/AndroidDeviceId%3E%20%3C/user%3E
 	@Path("/Register")
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_XML)
-	public String register(@QueryParam("request") String request) {
+	public String register( String request) {
+		System.out.println("register: requestReceived:"+ request);
 		String response = "";
-		User user = deserializeUserXML(request);
-		String query = generateRegisterQuery(user);
+		try {
+			User user = deserializeUserXML(request);
+			String query = generateRegisterQuery(user);
 
-		MySQLHelper helper = new MySQLHelper();
-		helper.executeQuery(query);
-		helper.disposeConnection();
+			MySQLHelper helper = new MySQLHelper();
+			helper.executeQuery(query);
+			helper.disposeConnection();
+			response = "SUCCESS";
+		
+		} catch (Exception ex) {
+			response = "FAILURE";
+		}
 
-		// System.out.println(request);
+		 System.out.println(response);
 
-		return request;
+		return response;
 	}
 
 	@Path("/GetNotifications")
@@ -245,7 +257,7 @@ public class DMSWebServiceImpl {
 				+ " FROM proposedmeeting p inner join meetingdates md on md.meetingId = p.meetingId"
 				+ " inner join participants pr on pr.meetingId = p.meetingId"
 				+ " where pr.UserEmailId='" + request.getUserEmailId() + "'";
-		
+
 		System.out.println(query);
 		return query;
 	}
@@ -320,12 +332,12 @@ public class DMSWebServiceImpl {
 		return query;
 	}
 
-	public String getUserXml(User user) {
+	public String getUserXml(User User) {
 		String xml = "";
 		Writer writer = new StringWriter();
 		Serializer serializer = new Persister();
 		try {
-			serializer.write(user, writer);
+			serializer.write(User, writer);
 			xml = writer.toString();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -35,6 +35,15 @@
     <string name="prompt_confirm_password">Confirm Password</string>
     <string name="prompt_device_id">Android Device Id</string>
 
+    <string name="error_enter_first_name">Enter First Name</string>
+    <string name="error_enter_last_name">Enter Last Name</string>
+    <string name="error_enter_email">Enter Email</string>
+    <string name="error_enter_password">Enter Password</string>
+    <string name="error_enter_confirm_password">Enter Confirm Password</string>
+    <string name="error_enter_password_not_match">Password Does not Match</string>
+    <string name="error_occured">Error Occured!</string>
+    <string name="register_success">Registered Successfully!</string>
+
     <string name= "btn_mav_sign_up_text">Sign Up</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_student_main">StudentMainActivity</string>
