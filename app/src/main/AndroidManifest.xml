@@ -48,6 +48,10 @@
             android:name=".Event_Details"
             android:label="@string/title_activity_event__details" >
         </activity>
+        <activity
+            android:name=".Notifiactions"
+            android:label="@string/title_activity_notifiactions" >
+        </activity>
     </application>
 
 </manifest>

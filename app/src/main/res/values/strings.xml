@@ -50,5 +50,6 @@
     <string name="title_activity_add__invites">ADD_Invites</string>
     <string name="title_activity_menu_page">MenuPage</string>
     <string name="title_activity_event__details">Event_Details</string>
+    <string name="title_activity_notifiactions">Notifiactions</string>
 
 </resources>
