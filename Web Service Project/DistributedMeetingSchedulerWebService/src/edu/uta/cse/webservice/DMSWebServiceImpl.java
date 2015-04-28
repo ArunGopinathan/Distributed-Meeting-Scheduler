@@ -3,10 +3,11 @@
  */
 package edu.uta.cse.webservice;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -70,6 +71,7 @@ public class DMSWebServiceImpl {
 		helper.disposeConnection();
 		if (user != null)
 			System.out.println(user.toString());
+
 		result = getUserXml(user);
 
 		return result;
@@ -92,6 +94,102 @@ public class DMSWebServiceImpl {
 		// System.out.println(request);
 
 		return request;
+	}
+
+	@Path("/GetNotifications")
+	@POST
+	@Produces(MediaType.TEXT_XML)
+	public String GetNotifications(String request) {
+		String response = "";
+
+		GetNotificationRequest getNotificationRequest = deserializeGetNotificationRequest(request);
+
+		String getNotificationsQuery = generateGetNotificationsQuery(getNotificationRequest);
+
+		MySQLHelper helper = new MySQLHelper();
+		ResultSet notificationRS = helper
+				.executeQueryAndGetResultSet(getNotificationsQuery);
+		NotificationsResponse ns = new NotificationsResponse();
+		GetNotificationRequest getnr;
+		Collection<Notification> notifications = new ArrayList<Notification>();
+		if (notificationRS != null) {
+			getnr = new GetNotificationRequest();
+			try {
+				while (notificationRS.next()) {
+					// each is a notification process one by one
+					Notification notification = new Notification();
+					int meetingId = notificationRS.getInt("MeetingId");
+
+					String getMeetingQuery = "select MeetingName,Agenda,Location from proposedmeeting where MeetingId="
+							+ meetingId;
+					ResultSet meetingRS = helper
+							.executeQueryAndGetResultSet(getMeetingQuery);
+					// get the meeting details
+					if (meetingRS.next()) {
+						String meetingName = meetingRS.getString("MeetingName");
+						String meetingAgenda = meetingRS.getString("Agenda");
+						String meetingLocation = meetingRS
+								.getString("Location");
+
+						notification.setMeetingName(meetingName);
+						notification.setMeetingAgenda(meetingAgenda);
+						notification.setMeetingLocation(meetingLocation);
+
+						Collection<MeetingDate> meetingDates = new ArrayList<MeetingDate>();
+						String getMeetingDatesQuery = "select distinct MeetingDate from meetingdates where MeetingId="
+								+ meetingId;
+
+						ResultSet meetingDatesRS = helper
+								.executeQueryAndGetResultSet(getMeetingDatesQuery);
+						while (meetingDatesRS.next()) {
+							MeetingDate meetingDate = new MeetingDate();
+							String meetDate = meetingDatesRS
+									.getString("MeetingDate");
+
+							meetingDate.setMeetDate(meetDate);
+
+							String getTimesQuery = "select MeetingStartTime, MeetingEndTime from meetingdates where MeetingDate='"
+									+ meetDate + "'";
+							ResultSet timesRS = helper
+									.executeQueryAndGetResultSet(getTimesQuery);
+							Collection<MeetingTime> meetingTimes = new ArrayList<MeetingTime>();
+
+							while (timesRS.next()) {
+								MeetingTime time = new MeetingTime();
+								String meetingStartTime = timesRS.getTime(
+										"MeetingStartTime").toString();
+								String meetingEndTime = timesRS.getTime(
+										"MeetingEndTime").toString();
+								time.setMeetingStartTime(meetingStartTime);
+								time.setMeetingEndTime(meetingEndTime);
+
+								meetingTimes.add(time);
+							}
+							meetingDate.setMeetingTimes(meetingTimes);
+							meetingDates.add(meetingDate);
+
+						}
+						notification.setMeetingDates(meetingDates);
+						notification
+								.setParticipants(new ArrayList<Participant>());
+					}
+					notifications.add(notification);
+				}
+
+				ns.setNotifications(notifications);
+
+				Writer writer = new StringWriter();
+				Serializer serializer = new Persister();
+
+				serializer.write(ns, writer);
+
+				response = writer.toString();
+
+			} catch (Exception ex) {
+
+			}
+		}
+		return response;
 	}
 
 	// /DistributedMeetingSchedulerWebService/DMSWebService/ProposeMeeting/
@@ -125,7 +223,8 @@ public class DMSWebServiceImpl {
 				}
 				// now insert the participants for the meeting
 				for (Participant p : proposeMeetingRequest.getParticipants()) {
-					String participantQuery = generateParticipantsQuery(meetingId, p);
+					String participantQuery = generateParticipantsQuery(
+							meetingId, p);
 					helper.executeQuery(participantQuery);
 				}
 
@@ -139,6 +238,16 @@ public class DMSWebServiceImpl {
 		}
 
 		return response;
+	}
+
+	public String generateGetNotificationsQuery(GetNotificationRequest request) {
+		String query = "SELECT distinct p.MeetingId"
+				+ " FROM proposedmeeting p inner join meetingdates md on md.meetingId = p.meetingId"
+				+ " inner join participants pr on pr.meetingId = p.meetingId"
+				+ " where pr.UserEmailId='" + request.getUserEmailId() + "'";
+		
+		System.out.println(query);
+		return query;
 	}
 
 	public String generateParticipantsQuery(int meetingId, Participant p) {
@@ -238,6 +347,23 @@ public class DMSWebServiceImpl {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	private GetNotificationRequest deserializeGetNotificationRequest(
+			String requestxml) {
+		GetNotificationRequest request = new GetNotificationRequest();
+		Writer writer = new StringWriter();
+		Serializer serializer = new Persister();
+		try {
+			request = serializer.read(GetNotificationRequest.class, requestxml);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return request;
+
 	}
 
 	private ProposeMeetingRequest deserializeProposeMeetingRequestXML(
