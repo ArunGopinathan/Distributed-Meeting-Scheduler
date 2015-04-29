@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.uta.cse.distributedmeetingscheduler" >
+
     <!-- permissions required -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -38,6 +39,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uta.cse.distributedmeetingscheduler.SignInActivity" />
+        </activity>
+        <activity
+            android:name=".ScheduleMeeting"
+            android:label="@string/title_activity_schedule_meeting"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uta.cse.distributedmeetingscheduler.MainActivity" />
         </activity>
     </application>
 

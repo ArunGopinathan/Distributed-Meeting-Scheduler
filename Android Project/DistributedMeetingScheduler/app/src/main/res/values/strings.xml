@@ -53,5 +53,20 @@
     <string name="btn_propose_meeting">Propose Meeting</string>
     <string name="btn_schedule_meeting">Schedule Meeting</string>
     <string name="btn_notifications">Notifications</string>
+    <string name="title_activity_schedule_meeting">ScheduleMeeting</string>
+
+
+
+    <string name="selectdate1">Select Date</string>
+    <string name="Enter">Enter the Title Name for your Event</string>
+    <string name="SelectDate2">Select Start Time </string>
+    <string name="Description">Enter the Descriptions of Event</string>
+    <string name="title_activity_set_reminder">SetReminder</string>
+    <string name="title_activity_notification_view">NotificationView</string>
+    <string name="title_activity_add__invites">ADD_Invites</string>
+    <string name="title_activity_menu_page">MenuPage</string>
+    <string name="title_activity_event__details">Event_Details</string>
+    <string name="title_activity_notifiactions">Notifiactions</string>
+
 
 </resources>
