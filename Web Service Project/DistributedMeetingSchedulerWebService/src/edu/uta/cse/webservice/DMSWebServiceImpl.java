@@ -3,10 +3,11 @@
  */
 package edu.uta.cse.webservice;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -58,19 +59,25 @@ public class DMSWebServiceImpl {
 	public String Authenticate2(@PathParam("username") String username,
 			@PathParam("password") String password) {
 		String result = "";
+		try {
 
-		MySQLHelper helper = new MySQLHelper();
-		String query = "select * from login where MavEmail='" + username
-				+ "' and Password='" + password + "'";
-		ResultSet resultset = helper.executeQueryAndGetResultSet(query);
+			MySQLHelper helper = new MySQLHelper();
+			String query = "select * from login where MavEmail='" + username
+					+ "' and Password='" + password + "'";
+			ResultSet resultset = helper.executeQueryAndGetResultSet(query);
 
-		User user = processUserResultSet(resultset);
+			User user = processUserResultSet(resultset);
 
-		// dispose connection
-		helper.disposeConnection();
-		if (user != null)
-			System.out.println(user.toString());
-		result = getUserXml(user);
+			// dispose connection
+			helper.disposeConnection();
+			if (user != null)
+				System.out.println(user.toString());
+
+			result = getUserXml(user);
+			System.out.println("Authenticated:" + result);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
 		return result;
 
@@ -78,20 +85,123 @@ public class DMSWebServiceImpl {
 
 	// http://localhost:8080/DistributedMeetingSchedulerWebService/DMSWebService/Register?request=%3C?xml%20version=%221.0%22%20encoding=%22UTF-8%22?%3E%20%3Cuser%3E%20%3CFirstName%3EVenkataprabha%3C/FirstName%3E%20%3CLastName%3EVaradharajan%3C/LastName%3E%20%3CMavEmail%3EVenkataprab.Varadharajan@mavs.uta.edu%3C/MavEmail%3E%20%3CPassword%3E123%3C/Password%3E%20%3CAndroidDeviceId%3E%3C/AndroidDeviceId%3E%20%3C/user%3E
 	@Path("/Register")
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_XML)
-	public String register(@QueryParam("request") String request) {
+	public String register( String request) {
+		System.out.println("register: requestReceived:"+ request);
 		String response = "";
-		User user = deserializeUserXML(request);
-		String query = generateRegisterQuery(user);
+		try {
+			User user = deserializeUserXML(request);
+			String query = generateRegisterQuery(user);
+
+			MySQLHelper helper = new MySQLHelper();
+			helper.executeQuery(query);
+			helper.disposeConnection();
+			response = "SUCCESS";
+		
+		} catch (Exception ex) {
+			response = "FAILURE";
+		}
+
+		 System.out.println(response);
+
+		return response;
+	}
+
+	@Path("/GetNotifications")
+	@POST
+	@Produces(MediaType.TEXT_XML)
+	public String GetNotifications(String request) {
+		String response = "";
+
+		GetNotificationRequest getNotificationRequest = deserializeGetNotificationRequest(request);
+
+		String getNotificationsQuery = generateGetNotificationsQuery(getNotificationRequest);
 
 		MySQLHelper helper = new MySQLHelper();
-		helper.executeQuery(query);
-		helper.disposeConnection();
+		ResultSet notificationRS = helper
+				.executeQueryAndGetResultSet(getNotificationsQuery);
+		NotificationsResponse ns = new NotificationsResponse();
+		GetNotificationRequest getnr;
+		Collection<Notification> notifications = new ArrayList<Notification>();
+		if (notificationRS != null) {
+			getnr = new GetNotificationRequest();
+			try {
+				while (notificationRS.next()) {
+					// each is a notification process one by one
+					Notification notification = new Notification();
+					int meetingId = notificationRS.getInt("MeetingId");
 
-		// System.out.println(request);
+					String getMeetingQuery = "select MeetingName,Agenda,Location from proposedmeeting where MeetingId="
+							+ meetingId;
+					ResultSet meetingRS = helper
+							.executeQueryAndGetResultSet(getMeetingQuery);
+					// get the meeting details
+					if (meetingRS.next()) {
+						String meetingName = meetingRS.getString("MeetingName");
+						String meetingAgenda = meetingRS.getString("Agenda");
+						String meetingLocation = meetingRS
+								.getString("Location");
 
-		return request;
+						notification.setMeetingName(meetingName);
+						notification.setMeetingAgenda(meetingAgenda);
+						notification.setMeetingLocation(meetingLocation);
+
+						Collection<MeetingDate> meetingDates = new ArrayList<MeetingDate>();
+						String getMeetingDatesQuery = "select distinct MeetingDate from meetingdates where MeetingId="
+								+ meetingId;
+
+						ResultSet meetingDatesRS = helper
+								.executeQueryAndGetResultSet(getMeetingDatesQuery);
+						while (meetingDatesRS.next()) {
+							MeetingDate meetingDate = new MeetingDate();
+							String meetDate = meetingDatesRS
+									.getString("MeetingDate");
+
+							meetingDate.setMeetDate(meetDate);
+
+							String getTimesQuery = "select MeetingStartTime, MeetingEndTime from meetingdates where MeetingDate='"
+									+ meetDate + "'";
+							ResultSet timesRS = helper
+									.executeQueryAndGetResultSet(getTimesQuery);
+							Collection<MeetingTime> meetingTimes = new ArrayList<MeetingTime>();
+
+							while (timesRS.next()) {
+								MeetingTime time = new MeetingTime();
+								String meetingStartTime = timesRS.getTime(
+										"MeetingStartTime").toString();
+								String meetingEndTime = timesRS.getTime(
+										"MeetingEndTime").toString();
+								time.setMeetingStartTime(meetingStartTime);
+								time.setMeetingEndTime(meetingEndTime);
+
+								meetingTimes.add(time);
+							}
+							meetingDate.setMeetingTimes(meetingTimes);
+							meetingDates.add(meetingDate);
+
+						}
+						notification.setMeetingDates(meetingDates);
+						notification
+								.setParticipants(new ArrayList<Participant>());
+					}
+					notifications.add(notification);
+				}
+
+				ns.setNotifications(notifications);
+
+				Writer writer = new StringWriter();
+				Serializer serializer = new Persister();
+
+				serializer.write(ns, writer);
+
+				response = writer.toString();
+
+			} catch (Exception ex) {
+
+			}
+		}
+		return response;
 	}
 
 	// /DistributedMeetingSchedulerWebService/DMSWebService/ProposeMeeting/
@@ -125,7 +235,8 @@ public class DMSWebServiceImpl {
 				}
 				// now insert the participants for the meeting
 				for (Participant p : proposeMeetingRequest.getParticipants()) {
-					String participantQuery = generateParticipantsQuery(meetingId, p);
+					String participantQuery = generateParticipantsQuery(
+							meetingId, p);
 					helper.executeQuery(participantQuery);
 				}
 
@@ -139,6 +250,16 @@ public class DMSWebServiceImpl {
 		}
 
 		return response;
+	}
+
+	public String generateGetNotificationsQuery(GetNotificationRequest request) {
+		String query = "SELECT distinct p.MeetingId"
+				+ " FROM proposedmeeting p inner join meetingdates md on md.meetingId = p.meetingId"
+				+ " inner join participants pr on pr.meetingId = p.meetingId"
+				+ " where pr.UserEmailId='" + request.getUserEmailId() + "'";
+
+		System.out.println(query);
+		return query;
 	}
 
 	public String generateParticipantsQuery(int meetingId, Participant p) {
@@ -211,12 +332,12 @@ public class DMSWebServiceImpl {
 		return query;
 	}
 
-	public String getUserXml(User user) {
+	public String getUserXml(User User) {
 		String xml = "";
 		Writer writer = new StringWriter();
 		Serializer serializer = new Persister();
 		try {
-			serializer.write(user, writer);
+			serializer.write(User, writer);
 			xml = writer.toString();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -238,6 +359,23 @@ public class DMSWebServiceImpl {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	private GetNotificationRequest deserializeGetNotificationRequest(
+			String requestxml) {
+		GetNotificationRequest request = new GetNotificationRequest();
+		Writer writer = new StringWriter();
+		Serializer serializer = new Persister();
+		try {
+			request = serializer.read(GetNotificationRequest.class, requestxml);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return request;
+
 	}
 
 	private ProposeMeetingRequest deserializeProposeMeetingRequestXML(

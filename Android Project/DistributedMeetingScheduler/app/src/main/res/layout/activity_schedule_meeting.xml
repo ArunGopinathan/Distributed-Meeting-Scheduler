@@ -1,0 +1,153 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="edu.uta.cse.distributedmeetingscheduler.ScheduleMeeting">
+
+    <ImageView android:id="@+id/logo_image_small" android:layout_marginBottom="3dp"
+        android:layout_width="fill_parent" android:padding="15dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/dms_logo"/>
+
+    <EditText
+        android:id="@+id/Title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:autoText="false"
+        android:editable="true"
+        android:enabled="true"
+        android:inputType="text"
+        android:text="@string/Enter"
+        android:layout_below="@+id/logo_image_small"
+        android:layout_marginTop="130dp" />
+
+    <EditText
+        android:id="@+id/startdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Title"
+        android:ems="10"
+        android:onClick="showDatePickerDialog"
+        android:text="@string/selectdate1" />
+
+    <EditText
+        android:id="@+id/st1"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/startdate"
+        android:ems="10"
+        android:onClick="showDatePickerDialog"
+        android:text="@string/SelectDate2" />
+
+    <EditText
+        android:id="@+id/et1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/st1"
+        android:ems="10"
+        android:onClick="showDatePickerDialog"
+        android:text="Select End Time" />
+
+    <EditText
+        android:id="@+id/st2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/et1"
+        android:ems="10"
+        android:onClick="showDatePickerDialog"
+        android:text="@string/SelectDate2"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/et2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/st2"
+        android:ems="10"
+        android:onClick="showDatePickerDialog"
+        android:text="Select End Time" />
+
+    <EditText
+        android:id="@+id/st3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/et2"
+        android:ems="10"
+        android:onClick="showDatePickerDialog"
+        android:text="@string/SelectDate2" />
+
+    <EditText
+        android:id="@+id/et3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/st3"
+        android:ems="10"
+        android:onClick="showDatePickerDialog"
+        android:text="Select End Time" />
+
+    <EditText
+        android:id="@+id/location"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/Title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/Title"
+        android:layout_below="@+id/et3"
+        android:text="Location" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="NEXT"
+        android:visibility="visible" />
+
+    <TimePicker
+        android:id="@+id/timePicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/timePicker1"
+        android:layout_alignStart="@+id/timePicker1"
+        android:layout_below="@+id/startdate"
+        android:layout_gravity="center"
+        android:background="#ff2760ff"
+        android:nestedScrollingEnabled="false"
+        android:timePickerMode="spinner"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/seteventtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/st3"
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="Set Time"
+        android:visibility="invisible" />
+
+</RelativeLayout>

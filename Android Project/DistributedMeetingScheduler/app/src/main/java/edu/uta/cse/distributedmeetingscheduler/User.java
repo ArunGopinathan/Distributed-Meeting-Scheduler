@@ -1,26 +1,25 @@
 package edu.uta.cse.distributedmeetingscheduler;
 
+/**
+ * @author Arun
+ *
+ */
 
-
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import org.simpleframework.xml.*;
 
 @Root
 public class User {
+
     @Element
     private String FirstName;
     @Element
     private String LastName;
     @Element
     private String MavEmail;
-    @Element(required =false)
+    @Element(required = false)
+    private String Password;
+    @Element(required = false)
     private String AndroidDeviceId;
-    @ElementList
-
 
     public String getFirstName() {
         return FirstName;
@@ -53,4 +52,14 @@ public class User {
     public void setAndroidDeviceId(String androidDeviceId) {
         AndroidDeviceId = androidDeviceId;
     }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        this.Password = password;
+    }
 }
+
+

@@ -35,10 +35,38 @@
     <string name="prompt_confirm_password">Confirm Password</string>
     <string name="prompt_device_id">Android Device Id</string>
 
+    <string name="error_enter_first_name">Enter First Name</string>
+    <string name="error_enter_last_name">Enter Last Name</string>
+    <string name="error_enter_email">Enter Email</string>
+    <string name="error_enter_password">Enter Password</string>
+    <string name="error_enter_confirm_password">Enter Confirm Password</string>
+    <string name="error_enter_password_not_match">Password Does not Match</string>
+    <string name="error_occured">Error Occured!</string>
+    <string name="register_success">Registered Successfully!</string>
+
     <string name= "btn_mav_sign_up_text">Sign Up</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_student_main">StudentMainActivity</string>
     <string name="title_activity_qrcode_generate">QRCodeGenerateActivity</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <string name="btn_propose_meeting">Propose Meeting</string>
+    <string name="btn_schedule_meeting">Schedule Meeting</string>
+    <string name="btn_notifications">Notifications</string>
+    <string name="title_activity_schedule_meeting">ScheduleMeeting</string>
+
+
+
+    <string name="selectdate1">Select Date</string>
+    <string name="Enter">Enter the Title Name for your Event</string>
+    <string name="SelectDate2">Select Start Time </string>
+    <string name="Description">Enter the Descriptions of Event</string>
+    <string name="title_activity_set_reminder">SetReminder</string>
+    <string name="title_activity_notification_view">NotificationView</string>
+    <string name="title_activity_add__invites">ADD_Invites</string>
+    <string name="title_activity_menu_page">MenuPage</string>
+    <string name="title_activity_event__details">Event_Details</string>
+    <string name="title_activity_notifiactions">Notifiactions</string>
+
 
 </resources>
