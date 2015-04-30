@@ -10,13 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Server Address"
+        android:text="Add Participant"
         android:id="@+id/textView" />
 
     <EditText
         android:id="@+id/edittext"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Server Address:"
+        android:hint="Enter Email Address:"
         android:padding="10dp" />
 </LinearLayout>

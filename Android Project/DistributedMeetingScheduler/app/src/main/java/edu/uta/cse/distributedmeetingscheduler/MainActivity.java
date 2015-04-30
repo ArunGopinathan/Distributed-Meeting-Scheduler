@@ -5,6 +5,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -12,13 +14,28 @@ import org.simpleframework.xml.core.Persister;
 
 public class MainActivity extends ActionBarActivity {
     User user;
+    String userXML;
+Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userXML = getIntent().getStringExtra("USER_XML");
 
-        String userXML = getIntent().getStringExtra("USER_XML");
+        mProposeMeetingBtn = (Button) findViewById(R.id.btnProposeMeeting);
+        //open the Propose Meeting Intent
+        mProposeMeetingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),ScheduleMeeting.class);
+                intent.putExtra("USER_XML",userXML);
+                startActivity(intent);
+
+            }
+        });
+
+
         try {
             //parse User XML to User Class
             user = deserializeUserXML(userXML);

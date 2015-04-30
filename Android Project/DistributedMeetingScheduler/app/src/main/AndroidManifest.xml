@@ -48,6 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uta.cse.distributedmeetingscheduler.MainActivity" />
         </activity>
+        <activity
+            android:name=".add_Invites"
+            android:label="@string/title_activity_add__invites"
+            android:parentActivityName=".ScheduleMeeting" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uta.cse.distributedmeetingscheduler.ScheduleMeeting" />
+        </activity>
     </application>
 
 </manifest>

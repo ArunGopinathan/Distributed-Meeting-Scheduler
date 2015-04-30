@@ -58,8 +58,8 @@
 
 
     <string name="selectdate1">Select Date</string>
-    <string name="Enter">Enter the Title Name for your Event</string>
-    <string name="SelectDate2">Select Start Time </string>
+    <string name="Enter">Event Name</string>
+    <string name="SelectDate2">Start Time </string>
     <string name="Description">Enter the Descriptions of Event</string>
     <string name="title_activity_set_reminder">SetReminder</string>
     <string name="title_activity_notification_view">NotificationView</string>
