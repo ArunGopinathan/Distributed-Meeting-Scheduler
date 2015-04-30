@@ -24,11 +24,21 @@ Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
         userXML = getIntent().getStringExtra("USER_XML");
 
         mProposeMeetingBtn = (Button) findViewById(R.id.btnProposeMeeting);
+        mGetNotificationsBtn = (Button) findViewById(R.id.btnNotifications);
         //open the Propose Meeting Intent
         mProposeMeetingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),ScheduleMeeting.class);
+                intent.putExtra("USER_XML",userXML);
+                startActivity(intent);
+
+            }
+        });
+        mGetNotificationsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),NotificationsActivity.class);
                 intent.putExtra("USER_XML",userXML);
                 startActivity(intent);
 

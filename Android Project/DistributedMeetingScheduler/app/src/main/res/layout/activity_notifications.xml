@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="edu.uta.cse.distributedmeetingscheduler.NotificationsActivity">
+
+    <ImageView android:id="@+id/logo_image_small" android:layout_marginBottom="3dp"
+        android:layout_width="fill_parent" android:padding="15dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/dms_logo"/>
+    <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:indeterminate="true"
+        android:layout_below="@+id/logo_image_small"
+        android:layout_marginBottom="8dp" android:visibility="gone" android:layout_gravity="center|center_horizontal" />
+
+    <TextView android:id="@+id/Title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="Meeting Invites"
+        android:layout_below="@+id/logo_image_small"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:gravity="center"/>
+
+    <ListView android:id="@+id/meetingInvitesList" android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Title"></ListView>
+
+
+</RelativeLayout>

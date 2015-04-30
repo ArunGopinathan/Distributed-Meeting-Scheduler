@@ -56,6 +56,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uta.cse.distributedmeetingscheduler.ScheduleMeeting" />
         </activity>
+        <activity
+            android:name=".NotificationsActivity"
+            android:label="@string/title_activity_notifications"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uta.cse.distributedmeetingscheduler.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MeetingRequestActivity"
+            android:label="@string/title_activity_meeting_request"
+            android:parentActivityName=".NotificationsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uta.cse.distributedmeetingscheduler.NotificationsActivity" />
+        </activity>
     </application>
 
 </manifest>
