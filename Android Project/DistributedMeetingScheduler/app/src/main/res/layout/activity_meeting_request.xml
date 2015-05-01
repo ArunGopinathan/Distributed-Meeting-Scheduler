@@ -95,8 +95,7 @@
 
                 <EditText
                     android:id="@+id/meetTime1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </TableRow>
 
             <TableRow>
@@ -104,13 +103,16 @@
                 <Button
                     android:id="@+id/accept1"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.3"
                     android:text="Accept"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </TableRow>
+
+            <TableRow>
 
                 <Button
                     android:id="@+id/reject1"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.3"
                     android:text="Reject"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </TableRow>
@@ -131,13 +133,17 @@
                 <Button
                     android:id="@+id/accept2"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+
+                    android:layout_weight="0.3"
                     android:text="Accept"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </TableRow>
+
+            <TableRow>
 
                 <Button
                     android:id="@+id/reject2"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.3"
                     android:text="Reject"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </TableRow>
