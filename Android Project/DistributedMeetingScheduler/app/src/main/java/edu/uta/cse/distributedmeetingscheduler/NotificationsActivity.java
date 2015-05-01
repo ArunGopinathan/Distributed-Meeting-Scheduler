@@ -83,6 +83,8 @@ public class NotificationsActivity extends ActionBarActivity {
               Intent intent = new Intent(getApplicationContext(),MeetingRequestActivity.class);
               intent.putExtra("notification_xml",responseXML);
               intent.putExtra("meeting_id",meetingId+"");
+
+              intent.putExtra("user_xml",userXML);
                 startActivity(intent);
           }
       });
@@ -101,7 +103,7 @@ public class NotificationsActivity extends ActionBarActivity {
 
         list = new ArrayList<String>();
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, values,list);
+                R.layout.list_layout, values,list);
 
         listView.setAdapter(adapter);
 
@@ -218,7 +220,7 @@ public class NotificationsActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgressView.setVisibility(View.GONE);
-            StableArrayAdapter adapter = new StableArrayAdapter(NotificationsActivity.this, android.R.layout.simple_list_item_1, values,list);
+            StableArrayAdapter adapter = new StableArrayAdapter(NotificationsActivity.this, R.layout.list_layout, values,list);
             listView.setAdapter(adapter);
            adapter.notifyDataSetChanged();
 
