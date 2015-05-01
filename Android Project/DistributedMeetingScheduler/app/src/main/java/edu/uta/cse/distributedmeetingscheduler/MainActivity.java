@@ -45,6 +45,16 @@ Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
             }
         });
 
+        mScheduleMeetingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),OrganizerListActivity.class);
+                intent.putExtra("USER_XML",userXML);
+                startActivity(intent);
+
+            }
+        });
+
 
         try {
             //parse User XML to User Class

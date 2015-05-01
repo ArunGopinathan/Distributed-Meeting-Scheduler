@@ -72,6 +72,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uta.cse.distributedmeetingscheduler.NotificationsActivity" />
         </activity>
+        <activity
+            android:name=".OrganizerListActivity"
+            android:label="@string/title_activity_organizer_list"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uta.cse.distributedmeetingscheduler.MainActivity" />
+        </activity>
+        <activity
+            android:name=".OrganizerFinalMeetingActivity"
+            android:label="@string/title_activity_organizer_final_meeting" >
+        </activity>
     </application>
 
 </manifest>

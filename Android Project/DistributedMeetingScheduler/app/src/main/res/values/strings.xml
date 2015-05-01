@@ -69,6 +69,8 @@
     <string name="title_activity_notifiactions">Notifiactions</string>
     <string name="title_activity_notifications">NotificationsActivity</string>
     <string name="title_activity_meeting_request">MeetingRequestActivity</string>
+    <string name="title_activity_organizer_list">OrganizerListActivity</string>
+    <string name="title_activity_organizer_final_meeting">OrganizerFinalMeetingActivity</string>
 
 
 </resources>
