@@ -6,8 +6,10 @@ package edu.uta.cse.webservice;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -74,6 +76,8 @@ public class DMSWebServiceImpl {
 				System.out.println(user.toString());
 
 			result = getUserXml(user);
+			java.util.Date date = new java.util.Date();
+			System.out.println(new Timestamp(date.getTime()));
 			System.out.println("Authenticated:" + result);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -87,8 +91,8 @@ public class DMSWebServiceImpl {
 	@Path("/Register")
 	@POST
 	@Produces(MediaType.APPLICATION_XML)
-	public String register( String request) {
-		System.out.println("register: requestReceived:"+ request);
+	public String register(String request) {
+		System.out.println("register: requestReceived:" + request);
 		String response = "";
 		try {
 			User user = deserializeUserXML(request);
@@ -98,13 +102,73 @@ public class DMSWebServiceImpl {
 			helper.executeQuery(query);
 			helper.disposeConnection();
 			response = "SUCCESS";
-		
+
 		} catch (Exception ex) {
 			response = "FAILURE";
 		}
 
-		 System.out.println(response);
+		System.out.println(response);
 
+		return response;
+	}
+
+	@Path("/SaveUserResponse")
+	@POST
+	@Produces(MediaType.APPLICATION_XML)
+	public String saveUserResponse(String request) {
+
+		String response = "";
+		try {
+			SaveUserResponseRequest saveRequest = new SaveUserResponseRequest();
+			Serializer serializer = new Persister();
+			saveRequest = serializer.read(SaveUserResponseRequest.class,
+					request);
+
+			MySQLHelper helper = new MySQLHelper();
+			String participantId = "";
+			String meetingDateId = "";
+			String getParticipantIdQuery = "select ParticipantId from participants where UserEmailId='"
+					+ saveRequest.getParticipantEmail() + "'";
+
+			ResultSet prs = helper
+					.executeQueryAndGetResultSet(getParticipantIdQuery);
+			if (prs.next()) {
+				participantId = prs.getString("ParticipantId");
+			}
+
+			String getMeetingDateIdQuery = "select MeetingDateId from meetingdates where MeetingDate='"
+					+ saveRequest.getMeetDate()
+					+ "' and MeetingStartTime='"
+					+ saveRequest.getMeetStartTime()
+					+ "' and MeetingId='"
+					+ saveRequest.getMeetingId() + "'";
+
+			ResultSet mdrs = helper
+					.executeQueryAndGetResultSet(getMeetingDateIdQuery);
+			if (mdrs.next()) {
+				meetingDateId = Integer.toString(mdrs.getInt("MeetingDateId"));
+			}
+
+			String insertQuery = "insert into response(ParticipantId,MeetingId,MeetingDateId,presponse) values('"
+					+ participantId
+					+ "','"
+					+ saveRequest.getMeetingId()
+					+ "','"
+					+ meetingDateId
+					+ "','"
+					+ saveRequest.getUserResponse() + "')";
+			helper.executeQuery(insertQuery);
+
+			helper.disposeConnection();
+			System.out.println(response);
+			response = "SUCCESS";
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println(response);
+			response = "FAILURE";
+		}
+		System.out.println(response);
 		return response;
 	}
 
@@ -113,7 +177,7 @@ public class DMSWebServiceImpl {
 	@Produces(MediaType.TEXT_XML)
 	public String GetNotifications(String request) {
 		String response = "";
-
+		System.out.println(request);
 		GetNotificationRequest getNotificationRequest = deserializeGetNotificationRequest(request);
 
 		String getNotificationsQuery = generateGetNotificationsQuery(getNotificationRequest);
@@ -138,11 +202,13 @@ public class DMSWebServiceImpl {
 							.executeQueryAndGetResultSet(getMeetingQuery);
 					// get the meeting details
 					if (meetingRS.next()) {
+
 						String meetingName = meetingRS.getString("MeetingName");
 						String meetingAgenda = meetingRS.getString("Agenda");
 						String meetingLocation = meetingRS
 								.getString("Location");
-
+						// notification.setMeetingId(meetingId);
+						notification.setMeetingId(Integer.toString(meetingId));
 						notification.setMeetingName(meetingName);
 						notification.setMeetingAgenda(meetingAgenda);
 						notification.setMeetingLocation(meetingLocation);
@@ -197,10 +263,51 @@ public class DMSWebServiceImpl {
 
 				response = writer.toString();
 
+				// you forgot to dispose this
+				helper.disposeConnection();
+
 			} catch (Exception ex) {
 
 			}
 		}
+		return response;
+	}
+
+	@Path("/GetOrganizerMeetings")
+	@POST
+	@Produces(MediaType.TEXT_XML)
+	public String getOrganizerMeetings(String request) {
+		String response = "";
+		User user = new User();
+		Writer writer = new StringWriter();
+		Serializer serializer = new Persister();
+		try {
+			serializer.write(request, writer);
+			String query = "select * from proposemeeting where userId =(select UserId from login where MavEmail='"
+					+ user.getMavEmail() + "')";
+			OrganizerMeetingResponse responseobj = new OrganizerMeetingResponse();
+			
+			MySQLHelper helper = new MySQLHelper();
+			ResultSet rs = helper.executeQueryAndGetResultSet(query);
+			Collection<Notification> notifications = new ArrayList<Notification>();
+			while (rs.next()) {
+				Notification n = new Notification();
+				n.setMeetingId(Integer.toString(rs.getInt("MeetingId")));
+				n.setMeetingAgenda(rs.getString("Agenda"));
+				n.setMeetingAgenda(rs.getString("Location"));
+				notifications.add(n);
+			}
+			responseobj.setNotifications(notifications);
+			String responseXML = "";
+			
+			serializer.read(response, responseXML);
+			response = responseXML;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	//
+		
 		return response;
 	}
 

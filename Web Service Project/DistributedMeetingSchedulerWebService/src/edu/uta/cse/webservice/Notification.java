@@ -15,6 +15,8 @@ import org.simpleframework.xml.*;
 @Root
 public class Notification {
 	@Element
+	private String MeetingId;
+	@Element
 	private String MeetingName;
 	@Element
 	private String MeetingAgenda;
@@ -24,6 +26,14 @@ public class Notification {
 	private Collection<Participant> Participants;
 	@Element
 	private String MeetingLocation;
+
+	public String getMeetingId() {
+		return MeetingId;
+	}
+
+	public void setMeetingId(String meetingId) {
+		MeetingId = meetingId;
+	}
 
 	public String getMeetingName() {
 		return MeetingName;
