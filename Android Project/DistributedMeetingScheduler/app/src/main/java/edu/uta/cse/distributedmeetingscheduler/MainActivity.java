@@ -15,7 +15,7 @@ import org.simpleframework.xml.core.Persister;
 public class MainActivity extends ActionBarActivity {
     User user;
     String userXML;
-Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
+    Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +25,13 @@ Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
 
         mProposeMeetingBtn = (Button) findViewById(R.id.btnProposeMeeting);
         mGetNotificationsBtn = (Button) findViewById(R.id.btnNotifications);
+        mScheduleMeetingBtn = (Button) findViewById(R.id.btnScheduleMeeting);
         //open the Propose Meeting Intent
         mProposeMeetingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),ScheduleMeeting.class);
-                intent.putExtra("USER_XML",userXML);
+                Intent intent = new Intent(getApplicationContext(), ScheduleMeeting.class);
+                intent.putExtra("USER_XML", userXML);
                 startActivity(intent);
 
             }
@@ -38,8 +39,8 @@ Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
         mGetNotificationsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),NotificationsActivity.class);
-                intent.putExtra("USER_XML",userXML);
+                Intent intent = new Intent(getApplicationContext(), NotificationsActivity.class);
+                intent.putExtra("USER_XML", userXML);
                 startActivity(intent);
 
             }
@@ -48,8 +49,8 @@ Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
         mScheduleMeetingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),OrganizerListActivity.class);
-                intent.putExtra("USER_XML",userXML);
+                Intent intent = new Intent(getApplicationContext(), OrganizerListActivity.class);
+                intent.putExtra("USER_XML", userXML);
                 startActivity(intent);
 
             }
@@ -59,17 +60,15 @@ Button mProposeMeetingBtn, mScheduleMeetingBtn, mGetNotificationsBtn;
         try {
             //parse User XML to User Class
             user = deserializeUserXML(userXML);
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             //redirect to login page
-            Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
             startActivity(intent);
         }
 
 
-
     }
+
     protected User deserializeUserXML(String userXML) {
         User user = new User();
         Serializer serializer = new Persister();

@@ -20,11 +20,11 @@ public class Notification {
 	private String MeetingName;
 	@Element
 	private String MeetingAgenda;
-	@ElementList
+	@ElementList(required = false)
 	private Collection<MeetingDate> MeetingDates;
-	@ElementList
+	@ElementList(required = false)
 	private Collection<Participant> Participants;
-	@Element
+	@Element(required = false)
 	private String MeetingLocation;
 
 	public String getMeetingId() {

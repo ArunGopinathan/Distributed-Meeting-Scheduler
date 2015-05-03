@@ -30,8 +30,8 @@ import java.util.Collection;
 
 public class ScheduleMeeting extends ActionBarActivity {
 
-    EditText titl, startdate, st2, et2, st3, et3, locatn;
-    TextView st1,et1;
+    EditText titl, startdate,  st3, et3, locatn,meetAgenda;
+    TextView st1,et1,st2, et2;
     //  FrameLayout fr;
     public TimePicker timepicker1;
     public Button btn, setst1;
@@ -76,9 +76,11 @@ public class ScheduleMeeting extends ActionBarActivity {
         //title = (EditText) findViewById(R.id.title);
         st1 = (TextView) findViewById(R.id.st1);
         et1 = (TextView) findViewById(R.id.et1);
-     /*   st2 = (EditText) findViewById(R.id.st2);
-        et2 = (EditText) findViewById(R.id.et2);
-        st3 = (EditText) findViewById(R.id.st3);
+      st2 = (TextView) findViewById(R.id.st2);
+        et2 = (TextView) findViewById(R.id.et2);
+
+        meetAgenda = (EditText)findViewById(R.id.meetAgenda);
+      /*  st3 = (EditText) findViewById(R.id.st3);
         et3 = (EditText) findViewById(R.id.et3);*/
         locatn = (EditText) findViewById(R.id.location);
         // Calendar myCalendar = Calendar.getInstance();
@@ -270,11 +272,14 @@ public class ScheduleMeeting extends ActionBarActivity {
                 String ett1 = et1.getText().toString();
                 String loc =locatn.getText().toString();
 
+               String stt2 = st2.getText().toString();
+                String ett2 = et2.getText().toString();
+
                 ProposeMeetingRequest request = new ProposeMeetingRequest();
                 request.setMeetingName(e);
                 request.setMeetingLocation(loc);
                 request.setUserEmailId(user.getMavEmail());
-                request.setMeetingAgenda("Testing");
+                request.setMeetingAgenda(meetAgenda.getText().toString());
                 Collection<MeetingDate> meetingDates = new ArrayList<MeetingDate>();
 
                 MeetingDate date = new MeetingDate();
@@ -285,6 +290,12 @@ public class ScheduleMeeting extends ActionBarActivity {
                 time.setMeetingStartTime(stt1);
                 time.setMeetingEndTime(ett1);
                 meetingTimes.add(time);
+
+                //added second time
+                MeetingTime time2 = new MeetingTime();
+                time2.setMeetingEndTime(ett2);
+                time2.setMeetingStartTime(stt2);
+                meetingTimes.add(time2);
 
                 date.setMeetingTimes(meetingTimes);
 
@@ -332,6 +343,22 @@ public class ScheduleMeeting extends ActionBarActivity {
         mTimePicker.show();
 
     }
+    public void onStartTime2(View v) {
+
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(ScheduleMeeting.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                st2.setText(selectedHour + ":" + selectedMinute);
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+
+    }
     public void onEndTime(View v) {
 
         Calendar mcurrentTime = Calendar.getInstance();
@@ -348,6 +375,23 @@ public class ScheduleMeeting extends ActionBarActivity {
         mTimePicker.show();
 
     }
+    public void onEndTime2(View v) {
+
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(ScheduleMeeting.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                et2.setText(selectedHour + ":" + selectedMinute);
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+
+    }
+
 
 
 

@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="Meeting Name" />
 
-                <EditText android:id="@+id/eventName"
+                <EditText android:id="@+id/eventName" android:editable="false"
 
                     />
             </TableRow>
@@ -51,6 +51,7 @@
 
                 <TextView
                     android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
                     android:singleLine="false"
 
                     android:text="Meeting Agenda" />
@@ -61,7 +62,7 @@
                     android:inputType="textMultiLine"
                     android:maxLines="3"
                     android:minLines="3"
-
+                    android:editable="false"
                     android:scrollHorizontally="false" />
             </TableRow>
 
@@ -71,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:text="Meeting Location" />
 
-                <EditText android:id="@+id/meetLocation"
+                <EditText android:id="@+id/meetLocation" android:editable="false"
 
                     />
             </TableRow>
@@ -94,7 +95,7 @@
                     android:text="Meeting Time 1" />
 
                 <EditText
-                    android:id="@+id/meetTime1"
+                    android:id="@+id/meetTime1" android:editable="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </TableRow>
 
@@ -124,7 +125,7 @@
                     android:text="Meeting Time 2" />
 
                 <EditText android:id="@+id/meetTime2"
-
+                    android:editable="false"
                     />
             </TableRow>
 

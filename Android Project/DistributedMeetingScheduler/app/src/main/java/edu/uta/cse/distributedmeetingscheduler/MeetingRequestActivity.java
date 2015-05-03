@@ -289,7 +289,7 @@ public class MeetingRequestActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(String... params) {
             String[] time = mMeetTime2.getText().toString().split("-");
-            response2 = SaveResponse(time1Response, time[0], time[1]);
+            response2 = SaveResponse(time2Response, time[0], time[1]);
             //return null;
 
 

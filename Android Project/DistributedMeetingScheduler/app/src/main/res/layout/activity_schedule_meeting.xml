@@ -1,4 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+<RelativeLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,6 +21,7 @@
 
     <EditText
         android:id="@+id/Title"
+
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -31,6 +35,10 @@
         android:hint="@string/Enter"
         android:inputType="text" />
 
+    <EditText android:id="@+id/meetAgenda"
+        android:layout_width="fill_parent" android:inputType="textMultiLine"
+        android:minLines="3" android:maxLines="4" android:layout_below="@+id/Title"
+        android:layout_height="wrap_content"   android:hint="Agenda"/>
     <EditText
         android:id="@+id/startdate"
         android:layout_width="wrap_content"
@@ -39,7 +47,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/seteventtime"
-        android:layout_below="@+id/Title"
+        android:layout_below="@+id/meetAgenda"
         android:ems="10"
         android:hint="@string/selectdate1"
         android:onClick="showDatePickerDialog" />
@@ -109,6 +117,86 @@
             </TableLayout>
 
 
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+    <!-- Second One For time-->
+    <LinearLayout
+        android:id="@+id/layoutHorizontal2"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutHorizontal"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="121dp"
+                android:editable="false"
+                android:text="Time 2" />
+        </LinearLayout>
+
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_weight="0.3">
+
+            <TableRow>
+
+                <TextView android:layout_weight="0.2"
+                    android:id="@+id/st2"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/seteventtime"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignRight="@+id/seteventtime"
+                    android:layout_below="@+id/startdate"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:hint="@string/SelectDate2"
+                    android:onClick="showDatePickerDialog" />
+
+                <Button  android:layout_weight="0.2" android:text="Set Start Time" android:id="@+id/setStartTime2" android:onClick="onStartTime2" />
+            </TableRow>
+            <TableRow>
+
+                <TextView android:layout_weight="0.2"
+                    android:id="@+id/et2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/seteventtime"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignRight="@+id/seteventtime"
+                    android:layout_below="@+id/st1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:hint="End Time"
+                    />
+                <Button android:id="@+id/setEndTime2" android:layout_weight="0.2" android:text="Set End Time" android:onClick="onEndTime2" />
+            </TableRow>
+
+
+        </TableLayout>
+
+
+
+
+
     </LinearLayout>
 
 
@@ -174,7 +262,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/Title"
-        android:layout_below="@+id/layoutHorizontal"
+        android:layout_below="@+id/layoutHorizontal2"
         android:hint="Location" />
 
     <Button
@@ -184,6 +272,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="NEXT"
+        android:layout_below="@+id/location"
         android:visibility="visible" />
 
     <TimePicker
@@ -213,3 +302,4 @@
 
 
 </RelativeLayout>
+</ScrollView>

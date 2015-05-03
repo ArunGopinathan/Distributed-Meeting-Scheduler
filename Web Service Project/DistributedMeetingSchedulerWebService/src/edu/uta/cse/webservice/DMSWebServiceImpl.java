@@ -6,17 +6,20 @@ package edu.uta.cse.webservice;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.simpleframework.xml.Serializer;
@@ -55,6 +58,14 @@ public class DMSWebServiceImpl {
 
 	}
 
+	public static TreeMap<String, Integer> SortByValue(
+			HashMap<String, Integer> map) {
+		ValueComparator vc = new ValueComparator(map);
+		TreeMap<String, Integer> sortedMap = new TreeMap<String, Integer>(vc);
+		sortedMap.putAll(map);
+		return sortedMap;
+	}
+
 	@Path("/Authenticate2/{username}/{password}")
 	@GET
 	@Produces(MediaType.TEXT_XML)
@@ -85,6 +96,91 @@ public class DMSWebServiceImpl {
 
 		return result;
 
+	}
+
+	@Path("/getFinalMeeting/{meetingId}")
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	public String getFinalMeeting(@PathParam("meetingId") String meetingId)
+			throws SQLException {
+		String response = "";
+		String getMeetingQuery = "select MeetingName,Agenda,Location from proposedmeeting where MeetingId="
+				+ meetingId;
+		MySQLHelper helper = new MySQLHelper();
+		Notification notification = new Notification();
+
+		ResultSet meetingRS = helper
+				.executeQueryAndGetResultSet(getMeetingQuery);
+		if (meetingRS.next()) {
+			String meetingName = meetingRS.getString("MeetingName");
+			String meetingAgenda = meetingRS.getString("Agenda");
+			String meetingLocation = meetingRS.getString("Location");
+			// notification.setMeetingId(meetingId);
+			notification.setMeetingId(meetingId);
+			notification.setMeetingName(meetingName);
+			notification.setMeetingAgenda(meetingAgenda);
+			notification.setMeetingLocation(meetingLocation);
+
+		}
+		String responseQuery = "select * from response where meetingId='"
+				+ meetingId + "'";
+		ResultSet rs = helper.executeQueryAndGetResultSet(responseQuery);
+
+		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
+
+		while (rs.next()) {
+			String meetingDateId = rs.getString("MeetingDateId");
+			String presponse = rs.getString("presponse");
+			if (presponse.equals("YES")) {
+				if (!hmap.containsKey(meetingDateId)) {
+					hmap.put(meetingDateId, 1);
+				} else {
+					hmap.put(meetingDateId, hmap.get(meetingDateId) + 1);
+				}
+			}
+		}
+		TreeMap<String, Integer> sortedMap = SortByValue(hmap);
+		String bestMeetingId = sortedMap.firstEntry().getKey();
+
+		System.out.println(sortedMap);
+
+		String getMeetingDateQuery = "select * from meetingDates where MeetingDateId='"
+				+ bestMeetingId + "'";
+		ResultSet mdrs = helper
+				.executeQueryAndGetResultSet(getMeetingDateQuery);
+
+		Collection<MeetingDate> dates = new ArrayList<MeetingDate>();
+		MeetingDate meetDate = new MeetingDate();
+		if (mdrs.next()) {
+			String mDate = mdrs.getDate("MeetingDate").toString();
+			String mSTime = mdrs.getTime("MeetingStartTime").toString();
+			String mETime = mdrs.getTime("MeetingEndTime").toString();
+
+			meetDate.setMeetDate(mDate);
+			Collection<MeetingTime> meetTimes = new ArrayList<MeetingTime>();
+			MeetingTime meetTime = new MeetingTime();
+			meetTime.setMeetingStartTime(mSTime);
+			meetTime.setMeetingEndTime(mETime);
+			meetTimes.add(meetTime);
+			meetDate.setMeetingTimes(meetTimes);
+			dates.add(meetDate);
+		}
+
+		notification.setMeetingDates(dates);
+
+		FinalMeetingResponse responseobj = new FinalMeetingResponse();
+		responseobj.setNotification(notification);
+
+		Writer writer = new StringWriter();
+		Serializer serializer = new Persister();
+		try {
+			serializer.write(responseobj, writer);
+			response = writer.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return response;
 	}
 
 	// http://localhost:8080/DistributedMeetingSchedulerWebService/DMSWebService/Register?request=%3C?xml%20version=%221.0%22%20encoding=%22UTF-8%22?%3E%20%3Cuser%3E%20%3CFirstName%3EVenkataprabha%3C/FirstName%3E%20%3CLastName%3EVaradharajan%3C/LastName%3E%20%3CMavEmail%3EVenkataprab.Varadharajan@mavs.uta.edu%3C/MavEmail%3E%20%3CPassword%3E123%3C/Password%3E%20%3CAndroidDeviceId%3E%3C/AndroidDeviceId%3E%20%3C/user%3E
@@ -273,41 +369,44 @@ public class DMSWebServiceImpl {
 		return response;
 	}
 
-	@Path("/GetOrganizerMeetings")
-	@POST
+	@Path("/GetOrganizerMeetings/{email}")
+	@GET
 	@Produces(MediaType.TEXT_XML)
-	public String getOrganizerMeetings(String request) {
+	public String getOrganizerMeetings(@PathParam("email") String email) {
 		String response = "";
 		User user = new User();
-		Writer writer = new StringWriter();
+		// Writer writer = new StringWriter();
 		Serializer serializer = new Persister();
 		try {
-			serializer.write(request, writer);
-			String query = "select * from proposemeeting where userId =(select UserId from login where MavEmail='"
-					+ user.getMavEmail() + "')";
+			// serializer.write(request, writer);
+			String query = "select * from proposedmeeting where userId =(select UserId from login where MavEmail='"
+					+ email + "')";
+			System.out.println(query);
 			OrganizerMeetingResponse responseobj = new OrganizerMeetingResponse();
-			
+
 			MySQLHelper helper = new MySQLHelper();
 			ResultSet rs = helper.executeQueryAndGetResultSet(query);
 			Collection<Notification> notifications = new ArrayList<Notification>();
 			while (rs.next()) {
 				Notification n = new Notification();
 				n.setMeetingId(Integer.toString(rs.getInt("MeetingId")));
+				n.setMeetingName(rs.getString("MeetingName"));
 				n.setMeetingAgenda(rs.getString("Agenda"));
 				n.setMeetingAgenda(rs.getString("Location"));
 				notifications.add(n);
 			}
 			responseobj.setNotifications(notifications);
 			String responseXML = "";
-			
-			serializer.read(response, responseXML);
+			Writer writer = new StringWriter();
+			serializer.write(responseobj, writer);
+			responseXML = writer.toString();
 			response = responseXML;
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	//
-		
+		//
+
 		return response;
 	}
 
@@ -393,9 +492,9 @@ public class DMSWebServiceImpl {
 
 	public String generateProposeMeetingQuery(int userId,
 			ProposeMeetingRequest mr) {
-		String query = "insert into proposedmeeting(UserId,MeetingName,Agenda,Location) values("
+		String query = "insert into proposedmeeting(UserId,MeetingName,Agenda,Location) values('"
 				+ userId
-				+ ",'"
+				+ "','"
 				+ mr.getMeetingName()
 				+ "','"
 				+ mr.getMeetingAgenda()
@@ -403,6 +502,7 @@ public class DMSWebServiceImpl {
 				+ mr.getMeetingLocation()
 				+ "')";
 
+		System.out.println(query);
 		return query;
 
 	}
@@ -532,4 +632,21 @@ public class DMSWebServiceImpl {
 		return user;
 	}
 
+}
+
+class ValueComparator implements Comparator<String> {
+
+	Map<String, Integer> map;
+
+	public ValueComparator(Map<String, Integer> base) {
+		this.map = base;
+	}
+
+	public int compare(String a, String b) {
+		if (map.get(a) >= map.get(b)) {
+			return -1;
+		} else {
+			return 1;
+		} // returning 0 would merge keys
+	}
 }
